@@ -8,8 +8,30 @@
 // 801 - 1000 Units: ₹11.05
 // 1001+ Units: ₹12.15
 
-export function calculateUnits(watts, hoursPerDay) {
-  return (watts * hoursPerDay) / 1000;
+export const TOU_MULTIPLIERS = {
+  peak: 1.25,
+  normal: 1.0,
+  offPeak: 0.95
+};
+
+export function calculateToUUnits(watts, usageProfile) {
+  const peakUnits = (watts * usageProfile.peak) / 1000;
+  const normalUnits = (watts * usageProfile.normal) / 1000;
+  const offPeakUnits = (watts * usageProfile.offPeak) / 1000;
+  
+  const actualUnits = peakUnits + normalUnits + offPeakUnits;
+  
+  // Apply the advanced multipliers to calculate "billed" units
+  const effectiveUnits = 
+    (peakUnits * TOU_MULTIPLIERS.peak) + 
+    (normalUnits * TOU_MULTIPLIERS.normal) + 
+    (offPeakUnits * TOU_MULTIPLIERS.offPeak);
+
+  return { 
+    actualUnits, 
+    effectiveUnits, 
+    breakdown: { peak: peakUnits, normal: normalUnits, offPeak: offPeakUnits } 
+  };
 }
 
 export function calculateBiMonthlyBill(totalUnits) {

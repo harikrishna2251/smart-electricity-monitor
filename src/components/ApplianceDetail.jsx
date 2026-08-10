@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAppContext } from '../store/AppContext';
-import { calculateUnits, calculateDailyCost } from '../utils/calculator';
+import { calculateToUUnits, calculateDailyCost } from '../utils/calculator';
 
 // Mock hourly data for the chart
 const generateHourlyData = (totalHours, watts) => {
@@ -31,9 +31,10 @@ export default function ApplianceDetail() {
   
   if (!appliance) return <div>Appliance not found</div>;
 
-  const units = calculateUnits(appliance.watts, appliance.hoursToday);
-  const cost = calculateDailyCost(units);
-  const chartData = generateHourlyData(appliance.hoursToday, appliance.watts);
+  const totalHours = appliance.usageProfile.peak + appliance.usageProfile.normal + appliance.usageProfile.offPeak;
+  const { actualUnits, effectiveUnits } = calculateToUUnits(appliance.watts, appliance.usageProfile);
+  const cost = calculateDailyCost(effectiveUnits);
+  const chartData = generateHourlyData(totalHours, appliance.watts);
 
   return (
     <div className="details-container">
@@ -47,11 +48,11 @@ export default function ApplianceDetail() {
       <div className="dashboard-grid mb-4">
         <div className="appliance-card" style={{ minHeight: 'auto' }}>
           <div className="stat-label">Total Hours Today</div>
-          <div className="stat-value" style={{ fontSize: '1.5rem' }}>{appliance.hoursToday}h</div>
+          <div className="stat-value" style={{ fontSize: '1.5rem' }}>{totalHours}h</div>
         </div>
         <div className="appliance-card" style={{ minHeight: 'auto' }}>
           <div className="stat-label">Electricity Consumed</div>
-          <div className="stat-value" style={{ fontSize: '1.5rem', color: 'var(--accent)' }}>{units.toFixed(2)} kWh</div>
+          <div className="stat-value" style={{ fontSize: '1.5rem', color: 'var(--accent)' }}>{actualUnits.toFixed(2)} kWh</div>
         </div>
         <div className="appliance-card" style={{ minHeight: 'auto' }}>
           <div className="stat-label">Estimated Cost</div>

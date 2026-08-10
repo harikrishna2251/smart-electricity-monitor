@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../store/AppContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { calculateBiMonthlyBill } from '../utils/calculator';
+
 
 export default function MonthlyTracking() {
   const { getMonthlyProjection, getDailyTotals } = useAppContext();
@@ -25,7 +25,7 @@ export default function MonthlyTracking() {
   
   // Mid-month projections
   const units15Days = (monthlyUnits / 2);
-  const midMonthBill = calculateBiMonthlyBill(units15Days * 2) / 2; // Bi-monthly applied to half
+  const midMonthBill = getDailyTotals().totalCost * 15;
 
   return (
     <div className="tracking-container">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Wind, Refrigerator, Fan, Tv, WashingMachine, Lightbulb, Power, Monitor, Microwave, Thermometer, Shirt } from 'lucide-react';
-import { calculateUnits } from '../utils/calculator';
+import { calculateToUUnits } from '../utils/calculator';
 import { useAppContext } from '../store/AppContext';
 
 const getIcon = (name) => {
@@ -22,12 +22,12 @@ const getIcon = (name) => {
 
 export default function ApplianceCard({ appliance }) {
   const { toggleAppliance } = useAppContext();
-  const units = calculateUnits(appliance.watts, appliance.hoursToday);
+  const { actualUnits } = calculateToUUnits(appliance.watts, appliance.usageProfile);
   
   // Usage indicator logic
   let usageClass = 'usage-low';
-  if (units > 5) usageClass = 'usage-high';
-  else if (units > 2) usageClass = 'usage-medium';
+  if (actualUnits > 5) usageClass = 'usage-high';
+  else if (actualUnits > 2) usageClass = 'usage-medium';
 
   const handleToggle = (e) => {
     e.preventDefault(); // Prevent navigation when toggling
@@ -57,11 +57,11 @@ export default function ApplianceCard({ appliance }) {
       <div className="card-stats">
         <div className="stat-item">
           <span className="stat-label">Usage Today</span>
-          <span className={`stat-value ${usageClass}`}>{units.toFixed(1)} kWh</span>
+          <span className={`stat-value ${usageClass}`}>{actualUnits.toFixed(1)} kWh</span>
         </div>
         <div className="stat-item text-right">
           <span className="stat-label">Duration</span>
-          <span className="stat-value">{appliance.hoursToday}h</span>
+          <span className="stat-value">{appliance.usageProfile.peak + appliance.usageProfile.normal + appliance.usageProfile.offPeak}h</span>
         </div>
       </div>
     </Link>
