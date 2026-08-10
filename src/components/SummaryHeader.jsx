@@ -29,15 +29,15 @@ export default function SummaryHeader() {
       </div>
 
       <div className="summary-grid">
-        <div className="summary-pill">
+        <div className="summary-pill" onClick={() => navigate('/today-usage?filter=peak')} style={{ cursor: 'pointer', transition: 'transform 0.2s' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
           <span className="summary-pill-label">Peak</span>
           <span className="summary-pill-value">{breakdown.peak.toFixed(2)} <small>kWh</small></span>
         </div>
-        <div className="summary-pill">
+        <div className="summary-pill" onClick={() => navigate('/today-usage?filter=normal')} style={{ cursor: 'pointer', transition: 'transform 0.2s' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
           <span className="summary-pill-label">Normal</span>
           <span className="summary-pill-value">{breakdown.normal.toFixed(2)} <small>kWh</small></span>
         </div>
-        <div className="summary-pill">
+        <div className="summary-pill" onClick={() => navigate('/today-usage?filter=offPeak')} style={{ cursor: 'pointer', transition: 'transform 0.2s' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
           <span className="summary-pill-label">Off-Peak</span>
           <span className="summary-pill-value">{breakdown.offPeak.toFixed(2)} <small>kWh</small></span>
         </div>
