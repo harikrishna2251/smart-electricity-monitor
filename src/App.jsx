@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import ApplianceDetail from './components/ApplianceDetail';
 import BiMonthlyTracking from './components/BiMonthlyTracking';
 import ManageAppliances from './components/ManageAppliances';
+import TodayUsage from './components/TodayUsage';
 import './index.css';
 
 import Sidebar from './components/Sidebar';
@@ -34,6 +35,7 @@ function MainLayout() {
         <Route path="/manage" element={<ManageAppliances />} />
         <Route path="/appliance/:id" element={<ApplianceDetail />} />
         <Route path="/tracking" element={<BiMonthlyTracking />} />
+        <Route path="/today-usage" element={<TodayUsage />} />
       </Routes>
     </div>
   );
