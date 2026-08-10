@@ -60,8 +60,8 @@ export default function ApplianceCard({ appliance }) {
           <span className={`stat-value ${usageClass}`}>{actualUnits.toFixed(1)} kWh</span>
         </div>
         <div className="stat-item text-right">
-          <span className="stat-label">Duration</span>
-          <span className="stat-value">{appliance.usageProfile.peak + appliance.usageProfile.normal + appliance.usageProfile.offPeak}h</span>
+          <span className="stat-label">2-Month Total</span>
+          <span className="stat-value">{(appliance.biMonthlyAccumulated || 0).toFixed(1)} kWh</span>
         </div>
       </div>
     </Link>

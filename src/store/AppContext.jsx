@@ -24,8 +24,16 @@ const initialAppliances = [
   { id: 18, name: 'Gaming Console', watts: 150, isOn: false, usageProfile: { peak: 1, normal: 1, offPeak: 0 }, icon: 'Tv', isOwned: false }
 ];
 
+const initialAppliancesWithHistory = initialAppliances.map(app => {
+  const dailyUnits = (app.watts * (app.usageProfile.peak + app.usageProfile.normal + app.usageProfile.offPeak)) / 1000;
+  return {
+    ...app,
+    biMonthlyAccumulated: dailyUnits * 45 // Simulating we are 45 days into the 60-day cycle
+  };
+});
+
 export const AppProvider = ({ children }) => {
-  const [appliances, setAppliances] = useState(initialAppliances);
+  const [appliances, setAppliances] = useState(initialAppliancesWithHistory);
 
   const toggleAppliance = (id) => {
     setAppliances(appliances.map(app => 
@@ -59,12 +67,15 @@ export const AppProvider = ({ children }) => {
     return { actualUnits, effectiveUnits, totalCost, breakdown };
   };
 
-  const getMonthlyProjection = () => {
+  const getBiMonthlyProjection = () => {
     const dailyTotals = getDailyTotals();
+    // In TNEB, billing is per 60 days
     return {
       monthlyUnits: dailyTotals.actualUnits * 30,
-      monthlyEffectiveUnits: dailyTotals.effectiveUnits * 30,
-      monthlyCost: calculateDailyCost(dailyTotals.effectiveUnits) * 30
+      biMonthlyUnits: dailyTotals.actualUnits * 60,
+      biMonthlyEffectiveUnits: dailyTotals.effectiveUnits * 60,
+      // calculateDailyCost internally multiplies by 60 then divides by 60, so we just multiply by 60
+      biMonthlyCost: calculateDailyCost(dailyTotals.effectiveUnits) * 60
     };
   };
 
@@ -74,7 +85,7 @@ export const AppProvider = ({ children }) => {
       toggleAppliance,
       toggleOwnership,
       getDailyTotals,
-      getMonthlyProjection
+      getBiMonthlyProjection
     }}>
       {children}
     </AppContext.Provider>

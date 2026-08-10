@@ -4,34 +4,36 @@ import { AppProvider } from './store/AppContext';
 import SummaryHeader from './components/SummaryHeader';
 import Dashboard from './components/Dashboard';
 import ApplianceDetail from './components/ApplianceDetail';
-import MonthlyTracking from './components/MonthlyTracking';
+import BiMonthlyTracking from './components/BiMonthlyTracking';
 import ManageAppliances from './components/ManageAppliances';
 import './index.css';
 
+import Sidebar from './components/Sidebar';
+import DataHistory from './components/DataHistory';
+import { Menu } from 'lucide-react';
+
 function MainLayout() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <div className="app-container">
-      <h1>Smart Electricity Monitor</h1>
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
-      <div className="nav-bar mt-4">
-        <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-          Dashboard
-        </NavLink>
-        <NavLink to="/manage" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-          Manage Appliances
-        </NavLink>
-        <NavLink to="/tracking" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-          Monthly Tracking
-        </NavLink>
+      <div className="app-header">
+        <button className="menu-btn" onClick={() => setIsSidebarOpen(true)}>
+          <Menu size={24} />
+        </button>
+        <h1 style={{ margin: 0, flex: 1 }}>Smart Electricity Monitor</h1>
       </div>
 
       <SummaryHeader />
 
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/data" element={<DataHistory />} />
         <Route path="/manage" element={<ManageAppliances />} />
         <Route path="/appliance/:id" element={<ApplianceDetail />} />
-        <Route path="/tracking" element={<MonthlyTracking />} />
+        <Route path="/tracking" element={<BiMonthlyTracking />} />
       </Routes>
     </div>
   );
