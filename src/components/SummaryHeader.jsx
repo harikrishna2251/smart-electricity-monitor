@@ -4,7 +4,7 @@ import { X, TrendingUp } from 'lucide-react';
 
 export default function SummaryHeader() {
   const { getDailyTotals, appliances } = useAppContext();
-  const { actualUnits, effectiveUnits, totalCost, breakdown } = getDailyTotals();
+  const { actualUnits, totalCost, breakdown } = getDailyTotals();
   const [showModal, setShowModal] = useState(false);
 
   // Sort appliances by actual units consumed
@@ -18,34 +18,41 @@ export default function SummaryHeader() {
 
   return (
     <>
-      <div className="summary-header" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="summary-header">
+        <div className="summary-header-top">
           <div className="summary-block">
-            <span className="summary-label">TOTAL CONSUMED TODAY</span>
-            <span className="summary-value" style={{ fontSize: '2.5rem' }}>{actualUnits.toFixed(2)} <span style={{ fontSize: '1.25rem', opacity: 0.8 }}>kWh</span></span>
+            <span className="summary-label">Total Consumed Today</span>
+            <div className="summary-value-group">
+              <span className="summary-value">{actualUnits.toFixed(2)}</span>
+              <span className="summary-unit">kWh</span>
+            </div>
           </div>
-          <div className="summary-block text-right">
-            <span className="summary-label">TODAY'S BILL IMPACT</span>
-            <span className="summary-value" style={{ fontSize: '2.5rem' }}>₹ {totalCost.toFixed(2)}</span>
+          <div className="summary-divider"></div>
+          <div className="summary-block right">
+            <span className="summary-label">Today's Bill Impact</span>
+            <div className="summary-value-group">
+              <span className="summary-unit">₹</span>
+              <span className="summary-value">{totalCost.toFixed(2)}</span>
+            </div>
           </div>
         </div>
 
         <div className="summary-grid">
           <div className="summary-pill">
-            <span className="summary-pill-label">Peak Hours</span>
-            <span className="summary-pill-value">{breakdown.peak.toFixed(2)} kWh</span>
+            <span className="summary-pill-label">Peak</span>
+            <span className="summary-pill-value">{breakdown.peak.toFixed(2)} <small>kWh</small></span>
           </div>
           <div className="summary-pill">
-            <span className="summary-pill-label">Normal Hours</span>
-            <span className="summary-pill-value">{breakdown.normal.toFixed(2)} kWh</span>
+            <span className="summary-pill-label">Normal</span>
+            <span className="summary-pill-value">{breakdown.normal.toFixed(2)} <small>kWh</small></span>
           </div>
           <div className="summary-pill">
             <span className="summary-pill-label">Off-Peak</span>
-            <span className="summary-pill-value">{breakdown.offPeak.toFixed(2)} kWh</span>
+            <span className="summary-pill-value">{breakdown.offPeak.toFixed(2)} <small>kWh</small></span>
           </div>
         </div>
         
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} onClick={() => setShowModal(true)}>
+        <button className="btn-primary outline mt-4" onClick={() => setShowModal(true)}>
           <TrendingUp size={18} /> View Today's Detailed Usage
         </button>
       </div>
